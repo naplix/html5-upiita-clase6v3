@@ -1,0 +1,11 @@
+body {
+	background-color: #000000;
+}
+#contenedor-juego {
+	border-style: solid;
+	border-color: white;
+}
+h1{
+	text-align: center;
+	color: #FFFFFF;
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Ejemplo Quintus</title>
+		<style>
+			body {
+				background-color: black;
+			}
+			canvas {
+				border-style: solid;
+				border-color: white;
+			}
+		</style>
+		<script src='http://cdn.html5quintus.com/v0.1.6/quintus-all.min.js'></script>
+		<script src="lib/"></script>
+		<script>
+			$(function() {
+
+				var Q = Quintus({
+					development : true
+				});
+				Q.include("Sprites, Scenes, Input, 2D, Touch, UI");
+				//MAXIMIZAMOS EL JUEGO
+				Q.setup("juego", {
+					maximize : true
+				});
+				Q.controls();
+				Q.touch();
+
+				//DEFINIMOS LA ESCENA Y SUS CAPAS
+				Q.load("tiles_map.png, player.png, level1.tmx", function() {
+					Q.sheet("mosaicos", "tiles_map.png", {
+						tilew : 70,
+						tileh : 70
+					});
+					//indicamos que estos recursos pertenecen a la escena nivel1
+					Q.stageScene("nivel1");
+				});
+
+				//DEFINIMOS AL JUGADOR
+				Q.Sprite.extend("Jugador", {
+					init : function(p) {
+						this._super(p, {
+							asset : "player.png",
+							x : 110,
+							y : 50,
+							jumpSpeed : -380
+						});
+						this.add('2d, platformerControls');
+					},
+					step : function(dt) {
+						if (Q.inputs['left'] && this.p.direction == 'right') {
+							this.p.flip = 'x';
+						}
+						if (Q.inputs['right'] && this.p.direction == 'left') {
+							this.p.flip = false;
+						}
+					}
+				});
+
+				//DEFINIMOS LAS CAPAS DEL NIVEL
+				Q.scene("nivel1", function(stage) {
+
+					var background = new Q.TileLayer({
+						dataAsset : 'level1.tmx',
+						layerIndex : 0,
+						sheet : 'mosaicos',
+						tileW : 70,
+						tileH : 70,
+						type : Q.SPRITE_NONE
+					});
+					stage.insert(background);
+
+					var colisiones = new Q.TileLayer({
+						dataAsset : 'level1.tmx',
+						layerIndex : 1,
+						sheet : 'mosaicos',
+						tileW : 70,
+						tileH : 70
+					});
+					stage.collisionLayer(colisiones);
+
+					//CREAMOS AL JUGADOR
+					var jugador = stage.insert(new Q.Jugador());
+					stage.add("viewport").follow(jugador, {
+						x : true,
+						y : true
+					}, {
+						minX : 0,
+						maxX : background.p.w,
+						minY : 0,
+						maxY : background.p.h
+					});
+
+				});
+
+			});
+		</script>
+
+	</head>
+	<body>
+
+		<canvas id="juego" height="800" width="800">
+			Tu navegador no soporta Canvas
+		</canvas>
+
+	</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mario</title>
+		<!-- importamos la libreria de Quintus -->
+		<script src='javascript/lib/jquery-1.11.1.min.js'></script>
+		<script src='javascript/lib/jquery-1.11.1.min.js'></script>
+	</head>
+	<body>
+
+		<canvas id="juego" height="800" width="800">
+			Tu navegador no soporta Canvas
+		</canvas>
+		<script>
+			/*---------------------------------------------------------------------*/
+			/*----------------------- CONFIGURACION DEL FRAMEWORK -----------------*/
+
+			/* Creamos un objeto con la funcion Quintus, lo guardamos en una variable
+			 * llamada Q */
+			var Q = Quintus({
+				development : true
+			});
+
+			/* habilita los modulos para trabajar con colisiones y mapas */
+			Q.include("Sprites, Scenes, Input, 2D, Touch, UI, Audio");
+			/* pinta el juego en la caja con id=juego*/
+			Q.setup("juego");
+			/*habilitamos controles (teclado)*/
+			Q.controls();
+			/*habilitamos controles touch */
+			Q.touch();
+
+			/*-------------------- CARGAMOS IMAGENES, AUDIO Y MAPAS ------------------*/
+			Q.load("tiles_map.png, player.png, level1.tmx", function() {
+
+				/* CREAMOS UNA HOJA DE MOSAICOS*/
+				/* las hojas de mosaicos se usan para rellenar mapas */
+				Q.sheet("mosaicos", "tiles_map.png", {
+					tilew : 70,
+					tileh : 70
+				});
+
+				/* Una vez listos todos los recursos, ejecutamos la escena nivel1 */
+				Q.stageScene("nivel1");
+			});
+
+			/* ------------------- DEFINICION DEL NIVEL 1 (escena) -----------------*/
+			Q.scene("nivel1", function(stage) {
+				
+
+			});
+
+		</script>
+
+	</body>
+</html>
